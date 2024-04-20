@@ -5,7 +5,8 @@ An interface to tap into powerful AI Cloud tools.
 ## TODOs
 
 - [x] Implement authentication
-- [ ] Block non authenticated users
+- [x] Header with user auth
+- [x] Block non authenticated users
 - [ ] Login redirects and page
 - [ ] Connect to DB
 - [ ] Create queue in AWS
