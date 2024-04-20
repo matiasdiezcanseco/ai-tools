@@ -16,19 +16,22 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `ai-utils_${name}`);
+export const createTable = pgTableCreator((name) => `ai-tools_${name}`);
 
-export const posts = createTable(
-  "post",
+export const ttsTable = createTable(
+  "tts",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    text: varchar("text", { length: 500 }).notNull(),
+    status: varchar("status", { length: 50 }).notNull(),
+    audioUrl: varchar("audio_url", { length: 500 }),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
+    userId: varchar("user_id", { length: 128 }).notNull(),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    userIdIndex: index("user_id").on(example.userId),
+  }),
 );
