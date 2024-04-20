@@ -1,3 +1,6 @@
+import { ttsFormSchema } from "~/lib/schemas";
+import { createTtsRequest } from "~/server/tts";
+
 export const dynamic = "force-dynamic";
 
 export type TtsStatus = {
@@ -12,13 +15,13 @@ export type TtsCreate = {
 };
 
 export async function POST(request: Request) {
-  const formData = await request.formData();
-  const text = formData.get("text");
+  const body = (await request.json()) as TtsCreate;
+
+  ttsFormSchema.parse(body);
+
+  await createTtsRequest(body.text);
 
   return Response.json({
-    status: "pending",
-    id: "3",
-    text,
-    audio: undefined,
+    status: "ok",
   } as TtsStatus);
 }

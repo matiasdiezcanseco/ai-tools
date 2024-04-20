@@ -18,3 +18,19 @@ export const getTtsRequestsByUser = async () => {
 
   return results;
 };
+
+export const createTtsRequest = async (text: string) => {
+  const userId = auth().userId;
+
+  if (!userId) {
+    throw new Error("User not found");
+  }
+
+  const result = await db.insert(ttsTable).values({
+    text,
+    status: "pending",
+    userId,
+  });
+
+  return result;
+};

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -14,27 +13,39 @@ import {
 } from "~/components/ui/form";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
-
-const formSchema = z.object({
-  text: z.string().min(2).max(500),
-});
+import axios from "axios";
+import { ttsFormSchema } from "~/lib/schemas";
+import { type z } from "zod";
+import { useRouter } from "next/navigation";
 
 export default function TtsForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof ttsFormSchema>>({
+    resolver: zodResolver(ttsFormSchema),
     defaultValues: {
       text: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof ttsFormSchema>) {
     toast(
-      <div className="flex  items-center gap-2">
+      <div className="flex items-center gap-2">
         <Spinner className="size-4" />
         `Translating ${values.text.slice(0, 20)}...`
       </div>,
-      { duration: 3000 },
+      { duration: 100000, id: "ttsRequest" },
     );
+    try {
+      await axios.post("/api/tts", values);
+      toast.dismiss("ttsRequest");
+      toast("Request submitted", { duration: 3000 });
+    } catch (e) {
+      toast.dismiss("ttsRequest");
+      toast("There was an error", { duration: 3000 });
+    } finally {
+      router.refresh();
+    }
   }
 
   return (
