@@ -4,8 +4,9 @@ An interface to tap into powerful AI Cloud tools.
 
 ## TODOs
 
-- [ ] Implement authentication
+- [x] Implement authentication
 - [ ] Block non authenticated users
+- [ ] Login redirects and page
 - [ ] Connect to DB
 - [ ] Create queue in AWS
 - [ ] Create TTS function that adds to DB and queue

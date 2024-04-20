@@ -1,7 +1,14 @@
+import { SignUp, SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
+
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center text-white">
-      font
-    </main>
+    <div className="">
+      <SignedIn>
+        <SignOutButton>Sign Out</SignOutButton>
+      </SignedIn>
+      <SignedOut>
+        <SignUp routing="hash" forceRedirectUrl="tts" />
+      </SignedOut>
+    </div>
   );
 }
