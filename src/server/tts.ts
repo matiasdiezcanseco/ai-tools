@@ -3,6 +3,7 @@ import { db } from "./db";
 import { ttsTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { sendToQueue } from "./qstash";
 
 export const getTtsRequestsByUser = async () => {
   const userId = auth().userId;
@@ -26,11 +27,14 @@ export const createTtsRequest = async (text: string) => {
     throw new Error("User not found");
   }
 
-  const result = await db.insert(ttsTable).values({
-    text,
-    status: "pending",
-    userId,
-  });
+  const result = await db
+    .insert(ttsTable)
+    .values({
+      text,
+      status: "pending",
+      userId,
+    })
+    .returning();
 
-  return result;
+  return result[0];
 };

@@ -1,5 +1,5 @@
-import { ttsFormSchema } from "~/lib/schemas";
-import { createTtsRequest } from "~/server/tts";
+import type { NextRequest, NextResponse } from "next/server";
+import { verifySignatureAppRouter } from "@upstash/qstash/dist/nextjs";
 
 export const dynamic = "force-dynamic";
 
@@ -14,14 +14,11 @@ export type TtsCreate = {
   text: string;
 };
 
-export async function POST(request: Request) {
-  const body = (await request.json()) as TtsCreate;
+async function handler(_req: NextRequest) {
+  await new Promise((r) => setTimeout(r, 1000));
 
-  ttsFormSchema.parse(body);
-
-  await createTtsRequest(body.text);
-
-  return Response.json({
-    status: "ok",
-  } as TtsStatus);
+  console.log("Success");
+  return NextResponse.json({ name: "John Doe Serverless" });
 }
+
+export const POST = verifySignatureAppRouter(handler);
