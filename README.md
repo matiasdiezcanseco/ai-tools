@@ -7,7 +7,7 @@ An interface to tap into powerful AI Cloud tools.
 - [x] Implement authentication
 - [x] Header with user auth
 - [x] Block non authenticated users
-- [ ] Login redirects and page
+- [x] Login redirects
 - [ ] Connect to DB
 - [ ] Create queue in AWS
 - [ ] Create TTS function that adds to DB and queue

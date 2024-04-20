@@ -3,12 +3,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "~/components/ui/sonner";
-import {
-  ClerkProvider,
-  SignedIn,
-  UserButton,
-  UserProfile,
-} from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
