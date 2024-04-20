@@ -3,7 +3,6 @@ import { db } from "./db";
 import { ttsTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { sendToQueue } from "./qstash";
 
 export const getTtsRequestsByUser = async () => {
   const userId = auth().userId;
