@@ -42,7 +42,7 @@ export const addTtsToDb = async (text: string) => {
 
 export const addTtsToQueue = async (ttsData: TtsItem) => {
   const response = await axios.post<{ messageId: string }>(
-    `${env.QSTASH_URL}https://${env.NEXT_PUBLIC_VERCEL_URL}/api/tts`,
+    `${env.QSTASH_URL}https://${env.NEXT_PUBLIC_VERCEL_URL}/api/tts-process`,
     ttsData,
     {
       headers: {
