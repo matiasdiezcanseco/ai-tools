@@ -42,7 +42,7 @@ export const createTtsRequest = async (text: string) => {
 
 export const addTtsToQueue = async (ttsData: TtsItem) => {
   const response = await axios.post<{ messageId: string }>(
-    `${env.QSTASH_URL}${env.APP_URL}api/tts`,
+    `${env.QSTASH_URL}${env.VERCEL_URL}api/tts`,
     ttsData,
     {
       headers: {
