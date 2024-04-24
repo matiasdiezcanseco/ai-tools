@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
   const parsedBody = selectTtsSchema.pick({ text: true, id: true }).parse(body);
 
-  const client = new PollyClient({
+  const pollyClient = new PollyClient({
     region: "us-east-1",
     credentials: {
       accessKeyId: env.AWS_ACCESS_KEY_ID,
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   };
 
   try {
-    const response = await client.send(
+    const response = await pollyClient.send(
       new StartSpeechSynthesisTaskCommand(params),
     );
 
