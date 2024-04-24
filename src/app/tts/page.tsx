@@ -1,5 +1,6 @@
 import { getTtsRequestsByUser } from "~/server/tts";
 import TtsForm from "./_components/tts-form";
+import DisplayAudio from "./_components/display-audio";
 
 export default async function TtsPage() {
   const ttsRequests = await getTtsRequestsByUser();
@@ -15,7 +16,7 @@ export default async function TtsPage() {
             <p>#{request.id}</p>
             <p>Status: {request.status}</p>
             <p>Text: {request.text.slice(0, 20)}...</p>
-            {request.audioUrl && <audio src={request.audioUrl} controls />}
+            {request.audioUrl && <DisplayAudio id={request.id} />}
           </div>
         ))}
       </div>

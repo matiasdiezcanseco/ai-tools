@@ -9,6 +9,10 @@ import { auth } from "@clerk/nextjs/server";
 
 export const dynamic = "force-dynamic";
 
+export type SignUrlResponse = {
+  url: string;
+};
+
 export async function POST(request: Request) {
   const body = (await request.json()) as SignUrl;
 
