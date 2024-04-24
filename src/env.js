@@ -23,6 +23,7 @@ export const env = createEnv({
     QSTASH_TOKEN: z.string(),
     QSTASH_CURRENT_SIGNING_KEY: z.string(),
     QSTASH_NEXT_SIGNING_KEY: z.string(),
+    APP_URL: z.string(),
   },
 
   /**
@@ -50,9 +51,10 @@ export const env = createEnv({
     POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
     POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
     QSTASH_URL: process.env.QSTASH_URL,
-    QSTASH_TOKEN: process.env.QSTASH_URL,
-    QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_URL,
-    QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_URL,
+    QSTASH_TOKEN: process.env.QSTASH_TOKEN,
+    QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_CURRENT_SIGNING_KEY,
+    QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_NEXT_SIGNING_KEY,
+    APP_URL: process.env.APP_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
 

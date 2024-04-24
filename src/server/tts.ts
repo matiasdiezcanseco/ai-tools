@@ -1,8 +1,10 @@
 import "server-only";
 import { db } from "./db";
-import { ttsTable } from "./db/schema";
+import { type TtsItem, ttsTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
+import { env } from "~/env";
+import axios from "axios";
 
 export const getTtsRequestsByUser = async () => {
   const userId = auth().userId;
@@ -36,4 +38,18 @@ export const createTtsRequest = async (text: string) => {
     .returning();
 
   return result[0];
+};
+
+export const addTtsToQueue = async (ttsData: TtsItem) => {
+  const response = await axios.post<{ messageId: string }>(
+    `${env.QSTASH_URL}${env.APP_URL}api/tts`,
+    ttsData,
+    {
+      headers: {
+        Authorization: `Bearer ${env.QSTASH_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return response.data.messageId;
 };
