@@ -21,7 +21,7 @@ export const getTtsRequestsByUser = async () => {
   return results;
 };
 
-export const createTtsRequest = async (text: string) => {
+export const addTtsToDb = async (text: string) => {
   const userId = auth().userId;
 
   if (!userId) {
