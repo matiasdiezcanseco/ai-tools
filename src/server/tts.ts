@@ -21,6 +21,24 @@ export const getTtsRequestsByUser = async () => {
   return results;
 };
 
+export const updateTtsStatusById = async ({
+  id,
+  status,
+  url,
+}: {
+  id: number;
+  status: string;
+  url: string;
+}) => {
+  const result = await db
+    .update(ttsTable)
+    .set({ status, audioUrl: url })
+    .where(eq(ttsTable.id, id))
+    .returning();
+
+  return result[0];
+};
+
 export const addTtsToDb = async (text: string) => {
   const userId = auth().userId;
 
