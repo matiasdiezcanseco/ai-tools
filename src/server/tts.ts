@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "./db";
-import { type TtsItem, ttsTable } from "./db/schema";
+import { type SelectTts, ttsTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { env } from "~/env";
@@ -40,7 +40,7 @@ export const addTtsToDb = async (text: string) => {
   return result[0];
 };
 
-export const addTtsToQueue = async (ttsData: TtsItem) => {
+export const addTtsToQueue = async (ttsData: SelectTts) => {
   const response = await axios.post<{ messageId: string }>(
     `${env.QSTASH_URL}https://${env.NEXT_PUBLIC_VERCEL_URL}/api/tts-process`,
     ttsData,

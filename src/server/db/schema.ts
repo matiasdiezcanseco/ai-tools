@@ -9,7 +9,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-
+import { createSelectSchema } from "drizzle-zod";
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -36,4 +36,5 @@ export const ttsTable = createTable(
   }),
 );
 
-export type TtsItem = InferSelectModel<typeof ttsTable>;
+export const selectTtsSchema = createSelectSchema(ttsTable);
+export type SelectTts = InferSelectModel<typeof ttsTable>;

@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
+import { type SelectTts, selectTtsSchema } from "~/server/db/schema";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as object;
+  const body = (await request.json()) as SelectTts;
 
-  console.log(body);
+  const parsedBody = selectTtsSchema.parse(body);
 
-  return NextResponse.json({ body }, { status: 201 });
+  console.log(parsedBody);
+
+  return NextResponse.json({ parsedBody }, { status: 201 });
 }
