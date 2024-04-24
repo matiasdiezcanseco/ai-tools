@@ -23,7 +23,6 @@ export const env = createEnv({
     QSTASH_TOKEN: z.string(),
     QSTASH_CURRENT_SIGNING_KEY: z.string(),
     QSTASH_NEXT_SIGNING_KEY: z.string(),
-    VERCEL_URL: z.string(),
   },
 
   /**
@@ -33,6 +32,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_VERCEL_URL: z.string(),
   },
 
   /**
@@ -54,9 +54,9 @@ export const env = createEnv({
     QSTASH_TOKEN: process.env.QSTASH_TOKEN,
     QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_CURRENT_SIGNING_KEY,
     QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_NEXT_SIGNING_KEY,
-    VERCEL_URL: process.env.APP_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
