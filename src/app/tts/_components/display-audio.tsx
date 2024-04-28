@@ -22,13 +22,16 @@ const DisplayAudio: FC<DisplayAudioProps> = ({ id }) => {
     } as SignUrl);
     const url = response.data.url;
 
-    const audioResponse = await axios.put(
-      url,
-      {},
-      { headers: { "Content-Type": "audio/mp3" } },
-    );
+    const audioResponse = await axios.get(url, {
+      responseType: "blob",
+      headers: { "Content-Type": "audio/mp3" },
+    });
+
+    const blob = new Blob([audioResponse.data], { type: "audio/mp3" });
+    const audioUrl = URL.createObjectURL(blob);
+
+    setAudio(audioUrl);
     setLoading(false);
-    console.log(audioResponse);
   };
 
   return (
@@ -38,7 +41,7 @@ const DisplayAudio: FC<DisplayAudioProps> = ({ id }) => {
           Download Audio
         </Button>
       )}
-      {audio && <audio controls></audio>}
+      {audio && <audio controls src={audio}></audio>}
     </>
   );
 };
