@@ -1,6 +1,6 @@
 import { getTtsRequestsByUser } from "~/server/tts";
 import TtsForm from "./_components/tts-form";
-import DisplayAudio from "./_components/display-audio";
+import TtsCard from "./_components/tts-card";
 
 export default async function TtsPage() {
   const ttsRequests = await getTtsRequestsByUser();
@@ -12,12 +12,7 @@ export default async function TtsPage() {
       <h3 className="text-lg font-semibold">Requests</h3>
       <div className="grid grid-cols-3 gap-2">
         {ttsRequests.map((request) => (
-          <div key={request.id} className="space-y-2 rounded-lg border p-4">
-            <p>#{request.id}</p>
-            <p>Status: {request.status}</p>
-            <p>Text: {request.text.slice(0, 20)}...</p>
-            {request.audioUrl && <DisplayAudio id={request.id} />}
-          </div>
+          <TtsCard key={request.id} tts={request} />
         ))}
       </div>
     </div>

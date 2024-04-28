@@ -6,6 +6,12 @@ import { auth } from "@clerk/nextjs/server";
 import { env } from "~/env";
 import axios from "axios";
 
+export const getTtsRequestById = async (id: number) => {
+  const result = await db.select().from(ttsTable).where(eq(ttsTable.id, id));
+
+  return result[0];
+};
+
 export const getTtsRequestsByUser = async () => {
   const userId = auth().userId;
 
