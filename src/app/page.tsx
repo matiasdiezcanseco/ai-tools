@@ -15,7 +15,7 @@ const ToolCard = ({
 }) => {
   if (!enabled) {
     return (
-      <div className="relative rounded-md border border-gray-600 p-2 text-center">
+      <div className="relative rounded-md border border-border p-2 text-center">
         <Badge className="absolute right-0 top-0 -translate-y-2 translate-x-2">
           Coming Soon
         </Badge>
@@ -28,7 +28,7 @@ const ToolCard = ({
   return (
     <Link
       href={href}
-      className="rounded-md border border-gray-600 p-2 text-center hover:bg-neutral-900"
+      className="rounded-md border border-border p-2 text-center hover:bg-neutral-900"
     >
       <h3 className=" text-xl font-semibold">{title}</h3>
       <p>{description}</p>
