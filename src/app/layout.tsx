@@ -25,20 +25,24 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`font-sans ${inter.variable} dark`}>
-          <main className="flex min-h-screen">
-            <div className="flex w-64 flex-col gap-4 border-r border-slate-600 p-4">
-              <Link href="/">Dashboard</Link>
-              <Link href="/tts">Text to Speach</Link>
-              <Link href="/stt">Speach to Text</Link>
-              <Link href="/itt">Image to Text</Link>
-            </div>
-            <div className="w-full">
+          <main className="flex min-h-screen flex-col">
+            <header className="flex items-center justify-between border-b border-slate-600 p-4">
+              <Link href="/">
+                <span>Logo</span>
+              </Link>
               <SignedIn>
-                <header className="flex justify-end border-b border-slate-600 p-4">
-                  <UserButton />
-                </header>
+                <UserButton />
               </SignedIn>
-              <div className="w-full p-4">{children}</div>
+            </header>
+            <div className="flex flex-grow">
+              <div className="flex w-64 flex-col gap-4 border-r border-slate-600 p-4">
+                <Link href="/tts">Text to Speach</Link>
+                <Link href="/stt">Speach to Text</Link>
+                <Link href="/tti">Text to Image</Link>
+              </div>
+              <div className="w-full">
+                <div className="w-full p-4">{children}</div>
+              </div>
             </div>
           </main>
           <Toaster />
