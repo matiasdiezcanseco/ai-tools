@@ -1,10 +1,10 @@
 import { getTtsRequestsByUser } from "~/server/tts";
 import TtsForm from "./_components/tts-form";
-import TtsCard from "./_components/tts-card";
 import { Button } from "~/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
+import TtsRequestsDisplay from "./_components/tts-requests";
 
 export default async function TtsPage() {
   const ttsRequests = await getTtsRequestsByUser();
@@ -34,12 +34,7 @@ export default async function TtsPage() {
         </form>
       </div>
       <TtsForm />
-      <h3 className="text-2xl font-semibold">Requests</h3>
-      <div className="grid grid-cols-3 gap-2">
-        {orderedRequests.map((request) => (
-          <TtsCard key={request.id} tts={request} />
-        ))}
-      </div>
+      <TtsRequestsDisplay requests={orderedRequests} />
     </div>
   );
 }
