@@ -13,14 +13,11 @@ import {
 } from "~/components/ui/form";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
-import axios from "axios";
 import { ttsFormSchema } from "~/lib/schemas";
 import { type z } from "zod";
-import { useRouter } from "next/navigation";
+import { createTts } from "~/server/actions/tts";
 
 export default function TtsForm() {
-  const router = useRouter();
-
   const form = useForm<z.infer<typeof ttsFormSchema>>({
     resolver: zodResolver(ttsFormSchema),
     defaultValues: {
@@ -37,14 +34,16 @@ export default function TtsForm() {
       { duration: 100000, id: "ttsRequest" },
     );
     try {
-      await axios.post("/api/tts", values);
+      await createTts(values);
       toast.dismiss("ttsRequest");
       toast("Request submitted", { duration: 3000 });
-    } catch (e) {
+    } catch (e: unknown) {
       toast.dismiss("ttsRequest");
+      if (e instanceof Error) {
+        toast(e.message, { duration: 3000 });
+        return;
+      }
       toast("There was an error", { duration: 3000 });
-    } finally {
-      router.refresh();
     }
   }
 
