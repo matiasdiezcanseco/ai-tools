@@ -32,7 +32,7 @@ export default function TtsForm() {
     toast(
       <div className="flex items-center gap-2">
         <Spinner className="size-4" />
-        `Translating {values.text.slice(0, 20)}...`
+        Translating {values.text.slice(0, 20)}...
       </div>,
       { duration: 100000, id: "ttsRequest" },
     );
