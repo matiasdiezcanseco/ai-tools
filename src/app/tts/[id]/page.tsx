@@ -1,16 +1,18 @@
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { signUrl } from "~/server/sign-url";
 import { getTtsRequestByUserById } from "~/server/tts";
-import { ChevronLeft } from "lucide-react";
+import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
 
-const Navigation = () => {
+const Navigation = ({ id }: { id: number }) => {
   return (
-    <Link href="/tts" className="flex items-center gap-2">
-      <ChevronLeft />
-      Text to Speach
-    </Link>
+    <BreadcrumbNavigation
+      list={[
+        { text: "Home", href: "/" },
+        { text: "Text to Speach", href: "/tts" },
+        { text: "Audio", href: `/tts/${id}` },
+      ]}
+    />
   );
 };
 
@@ -25,7 +27,7 @@ const TtsPageComponent = ({
 }) => {
   return (
     <div className="flex flex-col gap-4">
-      <Navigation />
+      <Navigation id={id} />
       {showForm && (
         <form
           action={async () => {
@@ -74,7 +76,7 @@ export default async function TtsIdPage({
 
   return (
     <div className="space-y-8">
-      <Navigation />
+      <Navigation id={idAsNumber} />
       <p className="max-w-4xl">{ttsRequest.text}</p>
       <audio controls src={signedUrl}></audio>
     </div>

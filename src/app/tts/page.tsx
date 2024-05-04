@@ -4,14 +4,20 @@ import TtsCard from "./_components/tts-card";
 import { Button } from "~/components/ui/button";
 import { RefreshCcw } from "lucide-react";
 import { revalidatePath } from "next/cache";
+import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
 
 export default async function TtsPage() {
   const ttsRequests = await getTtsRequestsByUser();
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Text to Speach</h2>
+      <div className="flex items-start justify-between">
+        <BreadcrumbNavigation
+          list={[
+            { text: "Home", href: "/" },
+            { text: "Text to Speach", href: "/tts" },
+          ]}
+        />
         <form
           action={async () => {
             "use server";
