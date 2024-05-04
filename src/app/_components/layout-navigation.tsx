@@ -9,7 +9,7 @@ export const LayoutNavigation = () => {
 
   const generateClassName = (href: string) => {
     return clsx("hover:underline", {
-      "text-zinc-400": path !== href,
+      "text-muted": path !== href,
       "text-white": path === href,
       "font-semibold": path === href,
     });
@@ -20,11 +20,11 @@ export const LayoutNavigation = () => {
       <Link href="/tts" className={generateClassName("/tts")}>
         Text to Speach
       </Link>
-      <div className="flex cursor-not-allowed gap-2 text-zinc-400">
+      <div className="flex cursor-not-allowed gap-2 text-muted">
         Speach to Text
         <Badge>Soon</Badge>
       </div>
-      <div className="flex cursor-not-allowed gap-2 text-zinc-400">
+      <div className="flex cursor-not-allowed gap-2 text-muted">
         Text to Image
         <Badge>Soon</Badge>
       </div>

@@ -30,7 +30,7 @@ export default async function TtsPage() {
         </form>
       </div>
       <TtsForm />
-      <h3 className="text-lg font-semibold">Requests</h3>
+      <h3 className="text-2xl font-semibold">Requests</h3>
       <div className="grid grid-cols-3 gap-2">
         {ttsRequests.map((request) => (
           <TtsCard key={request.id} tts={request} />

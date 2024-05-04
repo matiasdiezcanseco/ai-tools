@@ -67,7 +67,7 @@ export default function TtsForm() {
                 <div>
                   <FormMessage />
                 </div>
-                <span className="text-right text-sm">
+                <span className="text-right text-xs text-muted">
                   {field.value.length} / 500
                 </span>
               </div>
