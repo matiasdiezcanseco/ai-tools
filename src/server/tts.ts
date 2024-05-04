@@ -69,7 +69,7 @@ export const addTtsToDb = async (text: string) => {
   const userId = auth().userId;
 
   if (!userId) {
-    throw new Error("User not found");
+    throw new Error("Unauthorized");
   }
 
   const result = await db
@@ -81,19 +81,27 @@ export const addTtsToDb = async (text: string) => {
     })
     .returning();
 
+  if (!result[0]) {
+    throw new Error("Failed to create TTS request");
+  }
+
   return result[0];
 };
 
 export const addTtsToQueue = async (ttsData: SelectTts) => {
-  const response = await axios.post<{ messageId: string }>(
-    `${env.QSTASH_URL}https://${env.NEXT_PUBLIC_VERCEL_URL}/api/tts-process`,
-    ttsData,
-    {
-      headers: {
-        Authorization: `Bearer ${env.QSTASH_TOKEN}`,
-        "Content-Type": "application/json",
+  try {
+    const response = await axios.post<{ messageId: string }>(
+      `${env.QSTASH_URL}https://${env.NEXT_PUBLIC_VERCEL_URL}/api/tts-process`,
+      ttsData,
+      {
+        headers: {
+          Authorization: `Bearer ${env.QSTASH_TOKEN}`,
+          "Content-Type": "application/json",
+        },
       },
-    },
-  );
-  return response.data.messageId;
+    );
+    return response.data.messageId;
+  } catch (e) {
+    throw new Error("Failed to add TTS request to queue");
+  }
 };
