@@ -28,6 +28,7 @@ const TtsPageComponent = ({
   return (
     <div className="flex flex-col gap-4">
       <Navigation id={id} />
+      <p>{text}</p>
       {showForm && (
         <form
           action={async () => {
@@ -35,10 +36,9 @@ const TtsPageComponent = ({
             revalidatePath(`/tts/${id}`);
           }}
         >
-          <Button type="submit">Update</Button>
+          <Button type="submit">Reload</Button>
         </form>
       )}
-      <p>{text}</p>
     </div>
   );
 };

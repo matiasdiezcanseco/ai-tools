@@ -8,7 +8,7 @@ const TtsCard: FC<{ tts: SelectTts }> = ({ tts }) => {
   const statusClassname = clsx({
     "text-green-600": tts.status === "finished",
     "text-muted": tts.status === "pending",
-    "text-red-600": tts.status === "failed",
+    "text-destructive": tts.status === "failed",
   });
 
   return (
