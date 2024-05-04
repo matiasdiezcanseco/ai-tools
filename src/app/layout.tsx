@@ -28,9 +28,9 @@ export default function RootLayout({
           <main className="flex min-h-screen">
             <div className="flex w-64 flex-col gap-4 border-r border-slate-600 p-4">
               <Link href="/">Dashboard</Link>
-              <Link href="tts">Text to Speach</Link>
-              <Link href="stt">Speach to Text</Link>
-              <Link href="itt">Image to Text</Link>
+              <Link href="/tts">Text to Speach</Link>
+              <Link href="/stt">Speach to Text</Link>
+              <Link href="/itt">Image to Text</Link>
             </div>
             <div className="w-full">
               <SignedIn>

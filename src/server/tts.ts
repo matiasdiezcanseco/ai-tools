@@ -1,13 +1,33 @@
 import "server-only";
 import { db } from "./db";
 import { type SelectTts, ttsTable } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { env } from "~/env";
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 export const getTtsRequestById = async (id: number) => {
   const result = await db.select().from(ttsTable).where(eq(ttsTable.id, id));
+
+  return result[0];
+};
+
+export const getTtsRequestByUserById = async (id: number) => {
+  const userId = auth().userId;
+
+  if (!userId) {
+    redirect("/not-authorized");
+  }
+
+  const result = await db
+    .select()
+    .from(ttsTable)
+    .where(and(eq(ttsTable.id, id), eq(ttsTable.userId, userId)));
+
+  if (!result[0]) {
+    return undefined;
+  }
 
   return result[0];
 };

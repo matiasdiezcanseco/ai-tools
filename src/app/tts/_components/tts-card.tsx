@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { type FC } from "react";
+import { Button } from "~/components/ui/button";
 import { type SelectTts } from "~/server/db/schema";
-import DisplayAudio from "./display-audio";
 
 const TtsCard: FC<{ tts: SelectTts }> = ({ tts }) => {
   return (
@@ -8,7 +9,11 @@ const TtsCard: FC<{ tts: SelectTts }> = ({ tts }) => {
       <p>#{tts.id}</p>
       <p>Status: {tts.status}</p>
       <p>Text: {tts.text.slice(0, 20)}...</p>
-      {tts.audioUrl && <DisplayAudio id={tts.id} />}
+      {tts.audioUrl && (
+        <Link href={`/tts/${tts.id}`}>
+          <Button variant="default">Download Audio</Button>
+        </Link>
+      )}
     </div>
   );
 };
