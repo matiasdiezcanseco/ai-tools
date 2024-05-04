@@ -55,7 +55,7 @@ export default function TtsForm() {
           control={form.control}
           name="text"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative flex flex-col">
               <FormControl>
                 <Textarea
                   cols={80}
@@ -64,7 +64,14 @@ export default function TtsForm() {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <div className="grid grid-cols-2">
+                <div>
+                  <FormMessage />
+                </div>
+                <span className="text-right text-sm">
+                  {field.value.length} / 500
+                </span>
+              </div>
             </FormItem>
           )}
         />

@@ -24,7 +24,7 @@ const TtsPageComponent = ({
   showForm?: boolean;
 }) => {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <Navigation />
       {showForm && (
         <form
