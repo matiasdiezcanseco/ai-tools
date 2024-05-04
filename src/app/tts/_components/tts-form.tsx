@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -14,27 +13,38 @@ import {
 } from "~/components/ui/form";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
-
-const formSchema = z.object({
-  text: z.string().min(2).max(500),
-});
+import { ttsFormSchema } from "~/lib/schemas";
+import { type z } from "zod";
+import { createTts } from "~/server/actions/tts";
 
 export default function TtsForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ttsFormSchema>>({
+    resolver: zodResolver(ttsFormSchema),
     defaultValues: {
       text: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof ttsFormSchema>) {
     toast(
-      <div className="flex  items-center gap-2">
+      <div className="flex items-center gap-2">
         <Spinner className="size-4" />
-        `Translating ${values.text.slice(0, 20)}...`
+        Translating {values.text.slice(0, 20)}...
       </div>,
-      { duration: 3000 },
+      { duration: 100000, id: "ttsRequest" },
     );
+    try {
+      await createTts(values);
+      toast.dismiss("ttsRequest");
+      toast("Request submitted", { duration: 3000 });
+    } catch (e: unknown) {
+      toast.dismiss("ttsRequest");
+      if (e instanceof Error) {
+        toast(e.message, { duration: 3000 });
+        return;
+      }
+      toast("There was an error", { duration: 3000 });
+    }
   }
 
   return (
@@ -44,7 +54,7 @@ export default function TtsForm() {
           control={form.control}
           name="text"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="relative flex flex-col">
               <FormControl>
                 <Textarea
                   cols={80}
@@ -53,7 +63,14 @@ export default function TtsForm() {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <div className="grid grid-cols-2">
+                <div>
+                  <FormMessage />
+                </div>
+                <span className="text-right text-xs text-muted">
+                  {field.value.length} / 500
+                </span>
+              </div>
             </FormItem>
           )}
         />

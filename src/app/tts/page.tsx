@@ -1,24 +1,40 @@
-import { getTtsRequestsByUserId } from "~/server/tts";
+import { getTtsRequestsByUser } from "~/server/tts";
 import TtsForm from "./_components/tts-form";
+import { Button } from "~/components/ui/button";
+import { RefreshCcw } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
+import TtsRequestsDisplay from "./_components/tts-requests";
 
 export default async function TtsPage() {
-  const ttsRequests = await getTtsRequestsByUserId("1");
+  const ttsRequests = await getTtsRequestsByUser();
+
+  const orderedRequests = ttsRequests.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-semibold">Text to Speach</h2>
-      <TtsForm />
-      <h3 className="text-lg font-semibold">Translations</h3>
-      <div className="grid grid-cols-3 gap-2">
-        {ttsRequests.map((request) => (
-          <div key={request.id} className="space-y-2 rounded-lg border p-4">
-            <p>#{request.id}</p>
-            <p>Status: {request.status}</p>
-            <p>Text: {request.text.slice(0, 20)}...</p>
-            {request.audio && <audio src={request.audio} controls />}
-          </div>
-        ))}
+      <div className="flex items-start justify-between">
+        <BreadcrumbNavigation
+          list={[
+            { text: "Home", href: "/" },
+            { text: "Text to Speach", href: "/tts" },
+          ]}
+        />
+        <form
+          action={async () => {
+            "use server";
+            revalidatePath("/tts");
+          }}
+        >
+          <Button variant="outline" type="submit">
+            <RefreshCcw size={18} />
+          </Button>
+        </form>
       </div>
+      <TtsForm />
+      <TtsRequestsDisplay requests={orderedRequests} />
     </div>
   );
 }

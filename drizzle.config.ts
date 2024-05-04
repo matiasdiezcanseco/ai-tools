@@ -6,7 +6,7 @@ export default {
   schema: "./src/server/db/schema.ts",
   driver: "pg",
   dbCredentials: {
-    connectionString: env.DATABASE_URL,
+    connectionString: env.POSTGRES_URL,
   },
-  tablesFilter: ["ai-utils_*"],
+  tablesFilter: ["ai-tools_*"],
 } satisfies Config;
