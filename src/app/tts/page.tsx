@@ -9,6 +9,10 @@ import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
 export default async function TtsPage() {
   const ttsRequests = await getTtsRequestsByUser();
 
+  const orderedRequests = ttsRequests.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between">
@@ -32,7 +36,7 @@ export default async function TtsPage() {
       <TtsForm />
       <h3 className="text-2xl font-semibold">Requests</h3>
       <div className="grid grid-cols-3 gap-2">
-        {ttsRequests.map((request) => (
+        {orderedRequests.map((request) => (
           <TtsCard key={request.id} tts={request} />
         ))}
       </div>
