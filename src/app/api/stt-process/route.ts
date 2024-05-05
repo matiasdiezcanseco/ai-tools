@@ -12,6 +12,8 @@ import { updateSttStatusById } from "~/server/stt";
 
 export const dynamic = "force-dynamic";
 
+export const maxDuration = 30;
+
 type TranscriptionJob = {
   jobName: string;
   accountId: string;
