@@ -36,8 +36,23 @@ export const ttsTable = createTable(
   }),
 );
 
+export const sttTable = createTable("stt", {
+  id: serial("id").primaryKey(),
+  text: varchar("text", { length: 1000 }),
+  status: varchar("status", { length: 50 }).notNull(),
+  audioUrl: varchar("audio_url", { length: 500 }).notNull(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt"),
+  userId: varchar("user_id", { length: 128 }).notNull(),
+});
+
 export const selectTtsSchema = createSelectSchema(ttsTable);
 export type SelectTts = InferSelectModel<typeof ttsTable>;
-// SelectTts.status only has 3 possible values: "pending", "failed", "completed"
+// SelectTts.status only has 3 possible values: "pending", "failed", "finished"
 // https://orm.drizzle.team/docs/indexes-constraints
 // Not implemented yet
+
+export const selectSttSchema = createSelectSchema(sttTable);
+export type SelectStt = InferSelectModel<typeof sttTable>;

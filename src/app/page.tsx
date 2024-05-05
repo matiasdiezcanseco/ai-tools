@@ -48,7 +48,7 @@ export default function HomePage() {
       title: "STT",
       description: "Convert speech to text",
       href: "/stt",
-      enabled: false,
+      enabled: true,
     },
     {
       title: "TTI",

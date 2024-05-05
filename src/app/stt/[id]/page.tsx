@@ -1,34 +1,37 @@
 import { revalidatePath } from "next/cache";
 import { Button } from "~/components/ui/button";
-import { getTtsRequestByUserById } from "~/server/tts";
 import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
 import { signUrl } from "~/server/s3";
+import { getSttRequestByUserById } from "~/server/stt";
 
 const Navigation = ({ id }: { id: number }) => {
   return (
     <BreadcrumbNavigation
       list={[
         { text: "Home", href: "/" },
-        { text: "Text to Speach", href: "/tts" },
-        { text: "Audio", href: `/tts/${id}` },
+        { text: "Speach to Text", href: "/stt" },
+        { text: "Text", href: `/stt/${id}` },
       ]}
     />
   );
 };
 
-const TtsPageComponent = ({
+const SttPageComponent = ({
   id,
   text,
   showForm = false,
+  audioUrl,
 }: {
   id: number;
   text: string;
   showForm?: boolean;
+  audioUrl?: string;
 }) => {
   return (
     <div className="flex flex-col gap-4">
       <Navigation id={id} />
       <p>{text}</p>
+      {audioUrl && <audio controls src={audioUrl}></audio>}
       {showForm && (
         <form
           action={async () => {
@@ -51,33 +54,44 @@ export default async function TtsIdPage({
   const idAsNumber = parseInt(params.id);
 
   if (typeof params.id !== "number" && isNaN(idAsNumber)) {
-    return <TtsPageComponent id={idAsNumber} text="Not found" />;
+    return <SttPageComponent id={idAsNumber} text="Not found" />;
   }
 
-  const ttsRequest = await getTtsRequestByUserById(parseInt(params.id));
+  const sttRequest = await getSttRequestByUserById(parseInt(params.id));
 
-  if (!ttsRequest) {
-    return <TtsPageComponent id={idAsNumber} text="Not found" />;
+  if (!sttRequest) {
+    return <SttPageComponent id={idAsNumber} text="Not found" />;
   }
 
-  if (ttsRequest.status === "pending") {
-    return <TtsPageComponent id={idAsNumber} text="Processing..." showForm />;
+  const signedUrl = await signUrl({ url: sttRequest.audioUrl });
+
+  if (sttRequest.status === "pending") {
+    return (
+      <SttPageComponent
+        id={idAsNumber}
+        text="Processing..."
+        showForm
+        audioUrl={signedUrl}
+      />
+    );
   }
 
-  if (ttsRequest.status === "failed") {
-    return <TtsPageComponent id={idAsNumber} text="Failed" />;
+  if (sttRequest.status === "failed") {
+    return (
+      <SttPageComponent id={idAsNumber} text="Failed" audioUrl={signedUrl} />
+    );
   }
-
-  const signedUrl = await signUrl({ url: ttsRequest.audioUrl ?? "" });
 
   if (!signedUrl) {
-    return <TtsPageComponent id={idAsNumber} text="Failed" />;
+    return (
+      <SttPageComponent id={idAsNumber} text="Failed" audioUrl={signedUrl} />
+    );
   }
 
   return (
     <div className="space-y-8">
       <Navigation id={idAsNumber} />
-      <p className="max-w-4xl">{ttsRequest.text}</p>
+      <p className="max-w-4xl">{sttRequest.text}</p>
       <audio controls src={signedUrl}></audio>
     </div>
   );
