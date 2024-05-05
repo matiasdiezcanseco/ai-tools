@@ -20,10 +20,9 @@ export const LayoutNavigation = () => {
       <Link href="/tts" className={generateClassName("/tts")}>
         Text to Speach
       </Link>
-      <div className="flex cursor-not-allowed gap-2 text-muted">
+      <Link href="/stt" className={generateClassName("/stt")}>
         Speach to Text
-        <Badge>Soon</Badge>
-      </div>
+      </Link>
       <div className="flex cursor-not-allowed gap-2 text-muted">
         Text to Image
         <Badge>Soon</Badge>
