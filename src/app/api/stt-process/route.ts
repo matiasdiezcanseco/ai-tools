@@ -44,13 +44,6 @@ export async function POST(request: Request) {
     },
   });
 
-  const updateRequestAsFailed = async () => {
-    await updateSttStatusById({
-      id: parsedBody.id,
-      status: "failed",
-    });
-  };
-
   const fileName = parsedBody.audioUrl.split("/").pop();
   const transcriptionJobName = `transcribe-${parsedBody.id}`;
 
@@ -63,14 +56,86 @@ export async function POST(request: Request) {
     OutputBucketName: env.AWS_BUCKET_NAME,
   };
 
-  try {
-    const response = await transcribeClient.send(
-      new StartTranscriptionJobCommand(params),
+  const updateRequestAsFailed = async () => {
+    await updateSttStatusById({
+      id: parsedBody.id,
+      status: "failed",
+    });
+  };
+
+  const checkIfTranscriptionJobExists = async () => {
+    const { TranscriptionJobSummaries } = await transcribeClient.send(
+      new ListTranscriptionJobsCommand({
+        JobNameContains: transcriptionJobName,
+      }),
     );
 
-    if (!response?.TranscriptionJob?.TranscriptionJobName) {
+    if (!TranscriptionJobSummaries || TranscriptionJobSummaries.length === 0)
+      return { jobExists: false, jobStatus: undefined };
+
+    const job = TranscriptionJobSummaries[0];
+
+    if (!job) return { jobExists: false, jobStatus: undefined };
+
+    return { jobExists: false, jobStatus: job.TranscriptionJobStatus };
+  };
+
+  const getTranscriptionText = async () => {
+    const url = await signUrl({
+      url: `https://${env.AWS_BUCKET_NAME}.s3.amazonaws.com/${transcriptionJobName}.json`,
+    });
+
+    const transcriptionResponse = await fetch(url);
+    const transcriptionData =
+      (await transcriptionResponse.json()) as TranscriptionJob;
+
+    if (
+      transcriptionData.results.transcripts.length === 0 ||
+      !transcriptionData.results.transcripts[0]
+    ) {
       await updateRequestAsFailed();
-      throw new Error("Failed to start transcription job");
+      throw new Error("No transcription data found");
+    }
+
+    return transcriptionData.results.transcripts[0].transcript;
+  };
+
+  try {
+    const { jobExists, jobStatus } = await checkIfTranscriptionJobExists();
+
+    if (jobExists && jobStatus === "COMPLETED") {
+      const transcriptionText = await getTranscriptionText();
+
+      const updatedTts = await updateSttStatusById({
+        id: parsedBody.id,
+        status: "finished",
+        text: transcriptionText,
+      });
+
+      if (!updatedTts) {
+        await updateRequestAsFailed();
+        throw new Error("Failed to update STT status");
+      }
+
+      return NextResponse.json(
+        { id: updatedTts.id, text: updatedTts.text, status: updatedTts.status },
+        { status: 200 },
+      );
+    }
+
+    if (jobExists && jobStatus !== "COMPLETED") {
+      throw new Error("Transcription job already exists and is in progress");
+    }
+
+    if (!jobExists) {
+      const response = await transcribeClient.send(
+        new StartTranscriptionJobCommand(params),
+      );
+
+      if (!response?.TranscriptionJob?.TranscriptionJobName) {
+        await updateRequestAsFailed();
+        throw new Error("Failed to start transcription job");
+      }
     }
 
     let finishedJob = false;
@@ -79,28 +144,15 @@ export async function POST(request: Request) {
       //Sleep for 7 seconds to allow transcription job to finish
       await new Promise((resolve) => setTimeout(resolve, 7000));
 
-      const { TranscriptionJobSummaries } = await transcribeClient.send(
-        new ListTranscriptionJobsCommand({
-          JobNameContains: transcriptionJobName,
-        }),
-      );
+      const { jobExists: createdJobExists, jobStatus: createdJobStatus } =
+        await checkIfTranscriptionJobExists();
 
-      if (
-        !TranscriptionJobSummaries ||
-        TranscriptionJobSummaries.length === 0
-      ) {
+      if (!createdJobExists) {
         await updateRequestAsFailed();
         throw new Error("No transcription job found");
       }
 
-      const job = TranscriptionJobSummaries[0];
-
-      if (!job) {
-        await updateRequestAsFailed();
-        throw new Error("No transcription job found");
-      }
-
-      if (job.TranscriptionJobStatus === "COMPLETED") {
+      if (createdJobStatus === "COMPLETED") {
         finishedJob = true;
       }
       attempts += 1;
@@ -111,27 +163,7 @@ export async function POST(request: Request) {
       throw new Error("Transcription job did not complete");
     }
 
-    //read from s3
-    const url = await signUrl({
-      url: `https://${env.AWS_BUCKET_NAME}.s3.amazonaws.com/${transcriptionJobName}.json`,
-    });
-
-    const transcriptionResponse = await fetch(url);
-    const transcriptionData =
-      (await transcriptionResponse.json()) as TranscriptionJob;
-
-    console.log(transcriptionData);
-
-    if (
-      transcriptionData.results.transcripts.length === 0 ||
-      !transcriptionData.results.transcripts[0]
-    ) {
-      await updateRequestAsFailed();
-      throw new Error("No transcription data found");
-    }
-
-    const transcriptionText =
-      transcriptionData.results.transcripts[0].transcript;
+    const transcriptionText = await getTranscriptionText();
 
     const updatedTts = await updateSttStatusById({
       id: parsedBody.id,
