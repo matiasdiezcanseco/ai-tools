@@ -3,7 +3,7 @@ import "server-only";
 
 import { revalidatePath } from "next/cache";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { addSttToDb, addSttToQueue } from "../sst";
+import { addSttToDb, addSttToQueue } from "../stt";
 import { uploadFile } from "../s3";
 
 export const createSttAction = async (formData: FormData) => {
