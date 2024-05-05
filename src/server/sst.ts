@@ -1,17 +1,16 @@
 import "server-only";
 import { db } from "./db";
 import { sttTable, type SelectStt } from "./db/schema";
-import { auth } from "@clerk/nextjs/server";
 import { env } from "~/env";
 import axios from "axios";
 
-export const addSttToDb = async ({ audioUrl }: { audioUrl: string }) => {
-  const userId = auth().userId;
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
+export const addSttToDb = async ({
+  audioUrl,
+  userId,
+}: {
+  audioUrl: string;
+  userId: string;
+}) => {
   const result = await db
     .insert(sttTable)
     .values({
@@ -24,8 +23,6 @@ export const addSttToDb = async ({ audioUrl }: { audioUrl: string }) => {
   if (!result[0]) {
     throw new Error("Failed to create STT request");
   }
-
-  console.log(result[0]);
 
   return result[0];
 };

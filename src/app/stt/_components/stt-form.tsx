@@ -16,7 +16,7 @@ import { sttFormSchema } from "~/lib/schemas";
 import { type z } from "zod";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
-import { createStt } from "~/server/actions/stt";
+import { createSttAction } from "~/server/actions/stt";
 
 export default function SttForm() {
   const form = useForm<z.infer<typeof sttFormSchema>>({
@@ -53,7 +53,7 @@ export default function SttForm() {
       const { file } = form.getValues();
       const formData = new FormData();
       formData.append("file", file);
-      await createStt(formData);
+      await createSttAction(formData);
 
       toast.dismiss("sttRequest");
       toast("Request submitted", { duration: 3000 });

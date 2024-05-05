@@ -4,9 +4,9 @@ import "server-only";
 import { revalidatePath } from "next/cache";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { addSttToDb, addSttToQueue } from "../sst";
-import { uploadFile } from "../upload-file";
+import { uploadFile } from "../s3";
 
-export const createStt = async (formData: FormData) => {
+export const createSttAction = async (formData: FormData) => {
   const userId = auth().userId;
   if (!userId) throw new Error("Unauthorized");
 
@@ -17,7 +17,7 @@ export const createStt = async (formData: FormData) => {
     const file = formData.get("file") as File;
 
     const audioUrl = await uploadFile({ file });
-    const sttRequest = await addSttToDb({ audioUrl });
+    const sttRequest = await addSttToDb({ audioUrl, userId });
     const sttQueueId = await addSttToQueue(sttRequest);
     return sttQueueId;
   } catch (e) {

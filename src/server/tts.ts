@@ -5,7 +5,6 @@ import { and, eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 import { env } from "~/env";
 import axios from "axios";
-import { redirect } from "next/navigation";
 
 export const getTtsRequestById = async (id: number) => {
   const result = await db.select().from(ttsTable).where(eq(ttsTable.id, id));
@@ -17,7 +16,7 @@ export const getTtsRequestByUserById = async (id: number) => {
   const userId = auth().userId;
 
   if (!userId) {
-    redirect("/not-authorized");
+    throw new Error("Unauthorized");
   }
 
   const result = await db
@@ -36,7 +35,7 @@ export const getTtsRequestsByUser = async () => {
   const userId = auth().userId;
 
   if (!userId) {
-    throw new Error("User not found");
+    throw new Error("Unauthorized");
   }
 
   const results = await db
@@ -65,13 +64,13 @@ export const updateTtsStatusById = async ({
   return result[0];
 };
 
-export const addTtsToDb = async (text: string) => {
-  const userId = auth().userId;
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
+export const addTtsToDb = async ({
+  text,
+  userId,
+}: {
+  text: string;
+  userId: string;
+}) => {
   const result = await db
     .insert(ttsTable)
     .values({

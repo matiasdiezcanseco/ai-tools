@@ -7,7 +7,9 @@ import { type z } from "zod";
 import { revalidatePath } from "next/cache";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
-export const createTts = async (values: z.infer<typeof ttsFormSchema>) => {
+export const createTtsAction = async (
+  values: z.infer<typeof ttsFormSchema>,
+) => {
   const userId = auth().userId;
   if (!userId) throw new Error("Unauthorized");
 
@@ -15,7 +17,7 @@ export const createTts = async (values: z.infer<typeof ttsFormSchema>) => {
   if (user.privateMetadata?.role !== "admin") throw new Error("Unauthorized");
 
   try {
-    const ttsRequest = await addTtsToDb(values.text);
+    const ttsRequest = await addTtsToDb({ text: values.text, userId: userId });
     const ttsQueueId = await addTtsToQueue(ttsRequest);
 
     return ttsQueueId;

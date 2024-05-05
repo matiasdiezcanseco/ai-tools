@@ -15,7 +15,7 @@ import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { ttsFormSchema } from "~/lib/schemas";
 import { type z } from "zod";
-import { createTts } from "~/server/actions/tts";
+import { createTtsAction } from "~/server/actions/tts";
 
 export default function TtsForm() {
   const form = useForm<z.infer<typeof ttsFormSchema>>({
@@ -34,7 +34,7 @@ export default function TtsForm() {
       { duration: 100000, id: "ttsRequest" },
     );
     try {
-      await createTts(values);
+      await createTtsAction(values);
       toast.dismiss("ttsRequest");
       toast("Request submitted", { duration: 3000 });
     } catch (e: unknown) {
