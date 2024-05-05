@@ -16,6 +16,7 @@ import { sttFormSchema } from "~/lib/schemas";
 import { type z } from "zod";
 import { useDropzone } from "react-dropzone";
 import { useCallback } from "react";
+import { createStt } from "~/server/actions/stt";
 
 export default function SttForm() {
   const form = useForm<z.infer<typeof sttFormSchema>>({
@@ -49,7 +50,11 @@ export default function SttForm() {
       { duration: 100000, id: "sttRequest" },
     );
     try {
-      // await createTts(values);
+      const { file } = form.getValues();
+      const formData = new FormData();
+      formData.append("file", file);
+      await createStt(formData);
+
       toast.dismiss("sttRequest");
       toast("Request submitted", { duration: 3000 });
     } catch (e: unknown) {
@@ -75,7 +80,12 @@ export default function SttForm() {
                   className="rounded-md border border-border p-4"
                   {...getRootProps()}
                 >
-                  <input {...getInputProps()} name="file" id="file" />
+                  <input
+                    {...getInputProps()}
+                    type="file"
+                    name="file"
+                    id="file"
+                  />
                   {field.value && <p>{field.value.name}</p>}
                   {isDragActive ? (
                     <p>Drop your audio file here ...</p>

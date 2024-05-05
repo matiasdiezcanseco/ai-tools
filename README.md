@@ -13,9 +13,12 @@ An interface to tap into powerful AI Cloud tools.
 - [x] Create TTS function that adds to DB and queue
 - [x] Implement queue logic to do TTS and change DB status when ready
 
+- [ ] Use next-safe-actions
+- [ ] Block submit buttons when request is in process
+
 - [x] Drop audio file
-- [ ] create server action to add db
-- [ ] Integrate stt aws
+- [x] create server action to add db
+- [x] Integrate stt aws
 - [ ] create function that the queue will call to process sst
 - [ ] in server action add to queue
 - [ ] show requests with status
