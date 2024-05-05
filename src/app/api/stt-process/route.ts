@@ -44,6 +44,13 @@ export async function POST(request: Request) {
     },
   });
 
+  const updateRequestAsFailed = async () => {
+    await updateSttStatusById({
+      id: parsedBody.id,
+      status: "failed",
+    });
+  };
+
   const fileName = parsedBody.audioUrl.split("/").pop();
   const transcriptionJobName = `transcribe-${parsedBody.id}`;
 
@@ -61,9 +68,8 @@ export async function POST(request: Request) {
       new StartTranscriptionJobCommand(params),
     );
 
-    console.log(response);
-
     if (!response?.TranscriptionJob?.TranscriptionJobName) {
+      await updateRequestAsFailed();
       throw new Error("Failed to start transcription job");
     }
 
@@ -83,12 +89,14 @@ export async function POST(request: Request) {
         !TranscriptionJobSummaries ||
         TranscriptionJobSummaries.length === 0
       ) {
+        await updateRequestAsFailed();
         throw new Error("No transcription job found");
       }
 
       const job = TranscriptionJobSummaries[0];
 
       if (!job) {
+        await updateRequestAsFailed();
         throw new Error("No transcription job found");
       }
 
@@ -99,6 +107,7 @@ export async function POST(request: Request) {
     }
 
     if (!finishedJob) {
+      await updateRequestAsFailed();
       throw new Error("Transcription job did not complete");
     }
 
@@ -117,6 +126,7 @@ export async function POST(request: Request) {
       transcriptionData.results.transcripts.length === 0 ||
       !transcriptionData.results.transcripts[0]
     ) {
+      await updateRequestAsFailed();
       throw new Error("No transcription data found");
     }
 
@@ -130,6 +140,7 @@ export async function POST(request: Request) {
     });
 
     if (!updatedTts) {
+      await updateRequestAsFailed();
       throw new Error("Failed to update STT status");
     }
 

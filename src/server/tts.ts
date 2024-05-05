@@ -53,7 +53,7 @@ export const updateTtsStatusById = async ({
 }: {
   id: number;
   status: string;
-  url: string;
+  url?: string;
 }) => {
   const result = await db
     .update(ttsTable)

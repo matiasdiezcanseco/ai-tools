@@ -47,7 +47,7 @@ export const updateSttStatusById = async ({
 }: {
   id: number;
   status: string;
-  text: string;
+  text?: string;
 }) => {
   const result = await db
     .update(sttTable)

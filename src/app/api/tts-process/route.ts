@@ -34,13 +34,22 @@ export async function POST(request: Request) {
     SampleRate: "22050",
   };
 
+  const updateRequestAsFailed = async () => {
+    await updateTtsStatusById({
+      id: parsedBody.id,
+      status: "failed",
+    });
+  };
+
   try {
     const response = await pollyClient.send(
       new StartSpeechSynthesisTaskCommand(params),
     );
 
-    if (!response?.SynthesisTask?.OutputUri)
+    if (!response?.SynthesisTask?.OutputUri) {
+      await updateRequestAsFailed();
       throw new Error("No url returned from Polly");
+    }
 
     const updatedTts = await updateTtsStatusById({
       id: parsedBody.id,
@@ -48,7 +57,10 @@ export async function POST(request: Request) {
       url: response.SynthesisTask.OutputUri,
     });
 
-    if (!updatedTts) throw new Error("Failed to update TTS status");
+    if (!updatedTts) {
+      await updateRequestAsFailed();
+      throw new Error("Failed to update TTS status");
+    }
 
     return NextResponse.json(
       { id: updatedTts.id, audioUrl: updatedTts.audioUrl },
