@@ -40,6 +40,24 @@ export const getSttRequestsByUser = async () => {
   return results;
 };
 
+export const updateSttStatusById = async ({
+  id,
+  status,
+  text,
+}: {
+  id: number;
+  status: string;
+  text: string;
+}) => {
+  const result = await db
+    .update(sttTable)
+    .set({ status, text })
+    .where(eq(sttTable.id, id))
+    .returning();
+
+  return result[0];
+};
+
 export const addSttToDb = async ({
   audioUrl,
   userId,

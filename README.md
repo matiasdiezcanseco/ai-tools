@@ -19,7 +19,7 @@ An interface to tap into powerful AI Cloud tools.
 - [x] Drop audio file
 - [x] create server action to add db
 - [x] Integrate stt aws
-- [ ] create function that the queue will call to process sst
+- [x] create function that the queue will call to process sst
 - [ ] in server action add to queue
 - [x] show requests with status
 - [x] page to show individual stt by id

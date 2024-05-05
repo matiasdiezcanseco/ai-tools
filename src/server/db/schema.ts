@@ -50,7 +50,7 @@ export const sttTable = createTable("stt", {
 
 export const selectTtsSchema = createSelectSchema(ttsTable);
 export type SelectTts = InferSelectModel<typeof ttsTable>;
-// SelectTts.status only has 3 possible values: "pending", "failed", "completed"
+// SelectTts.status only has 3 possible values: "pending", "failed", "finished"
 // https://orm.drizzle.team/docs/indexes-constraints
 // Not implemented yet
 
