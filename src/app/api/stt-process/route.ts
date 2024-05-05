@@ -12,7 +12,9 @@ import { updateSttStatusById } from "~/server/stt";
 
 export const dynamic = "force-dynamic";
 
-export const maxDuration = 30;
+// Hobby plan only allows max 10s duration
+//The function needs 30s duration
+export const maxDuration = 10;
 
 type TranscriptionJob = {
   jobName: string;
