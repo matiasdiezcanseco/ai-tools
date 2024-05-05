@@ -12,7 +12,9 @@ import { updateTtsStatusById } from "~/server/tts";
 
 export const dynamic = "force-dynamic";
 
-export const maxDuration = 30;
+// Hobby plan only allows max 10s duration
+//The function needs 30s duration
+export const maxDuration = 10;
 
 export async function POST(request: Request) {
   const body = (await request.json()) as SelectTts;

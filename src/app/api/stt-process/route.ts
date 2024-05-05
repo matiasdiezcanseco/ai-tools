@@ -12,7 +12,9 @@ import { updateSttStatusById } from "~/server/stt";
 
 export const dynamic = "force-dynamic";
 
-export const maxDuration = 30;
+// Hobby plan only allows max 10s duration
+//The function needs 30s duration
+export const maxDuration = 10;
 
 type TranscriptionJob = {
   jobName: string;
@@ -143,8 +145,8 @@ export async function POST(request: Request) {
     let finishedJob = false;
     let attempts = 0;
     while (!finishedJob || attempts < 3) {
-      //Sleep for 7 seconds to allow transcription job to finish
-      await new Promise((resolve) => setTimeout(resolve, 7000));
+      //Sleep for 5 seconds to allow transcription job to finish
+      await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const { jobExists: createdJobExists, jobStatus: createdJobStatus } =
         await checkIfTranscriptionJobExists();
