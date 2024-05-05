@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 
     if (!job) return { jobExists: false, jobStatus: undefined };
 
-    return { jobExists: false, jobStatus: job.TranscriptionJobStatus };
+    return { jobExists: true, jobStatus: job.TranscriptionJobStatus };
   };
 
   const getTranscriptionText = async () => {
@@ -102,6 +102,8 @@ export async function POST(request: Request) {
 
   try {
     const { jobExists, jobStatus } = await checkIfTranscriptionJobExists();
+
+    console.log(jobExists, jobStatus);
 
     if (jobExists && jobStatus === "COMPLETED") {
       const transcriptionText = await getTranscriptionText();
