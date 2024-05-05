@@ -1,8 +1,8 @@
 import { revalidatePath } from "next/cache";
 import { Button } from "~/components/ui/button";
-import { signUrl } from "~/server/sign-url";
 import { getTtsRequestByUserById } from "~/server/tts";
 import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
+import { signUrl } from "~/server/s3";
 
 const Navigation = ({ id }: { id: number }) => {
   return (
