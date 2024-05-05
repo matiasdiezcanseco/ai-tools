@@ -3,6 +3,42 @@ import { db } from "./db";
 import { sttTable, type SelectStt } from "./db/schema";
 import { env } from "~/env";
 import axios from "axios";
+import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
+
+export const getSttRequestByUserById = async (id: number) => {
+  const userId = auth().userId;
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const result = await db
+    .select()
+    .from(sttTable)
+    .where(and(eq(sttTable.id, id), eq(sttTable.userId, userId)));
+
+  if (!result[0]) {
+    return undefined;
+  }
+
+  return result[0];
+};
+
+export const getSttRequestsByUser = async () => {
+  const userId = auth().userId;
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const results = await db
+    .select()
+    .from(sttTable)
+    .where(eq(sttTable.userId, userId));
+
+  return results;
+};
 
 export const addSttToDb = async ({
   audioUrl,

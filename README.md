@@ -21,6 +21,6 @@ An interface to tap into powerful AI Cloud tools.
 - [x] Integrate stt aws
 - [ ] create function that the queue will call to process sst
 - [ ] in server action add to queue
-- [ ] show requests with status
-- [ ] page to show individual stt by id
-- [ ] filter for requests in stt page
+- [x] show requests with status
+- [x] page to show individual stt by id
+- [x] filter for requests in stt page

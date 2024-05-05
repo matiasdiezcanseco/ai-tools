@@ -3,8 +3,16 @@ import { RefreshCcw } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { BreadcrumbNavigation } from "~/components/breadcrumb-navigation";
 import SttForm from "./_components/stt-form";
+import SttRequestsDisplay from "./_components/stt-requests";
+import { getSttRequestsByUser } from "~/server/stt";
 
-export default async function TtsPage() {
+export default async function SttPage() {
+  const sttRequests = await getSttRequestsByUser();
+
+  const orderedRequests = sttRequests.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between">
@@ -26,7 +34,7 @@ export default async function TtsPage() {
         </form>
       </div>
       <SttForm />
-      {/* <TtsRequestsDisplay requests={orderedRequests} /> */}
+      <SttRequestsDisplay requests={orderedRequests} />
     </div>
   );
 }
