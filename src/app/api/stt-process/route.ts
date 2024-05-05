@@ -145,8 +145,8 @@ export async function POST(request: Request) {
     let finishedJob = false;
     let attempts = 0;
     while (!finishedJob || attempts < 3) {
-      //Sleep for 7 seconds to allow transcription job to finish
-      await new Promise((resolve) => setTimeout(resolve, 7000));
+      //Sleep for 5 seconds to allow transcription job to finish
+      await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const { jobExists: createdJobExists, jobStatus: createdJobStatus } =
         await checkIfTranscriptionJobExists();
