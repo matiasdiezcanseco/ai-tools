@@ -24,3 +24,12 @@ An interface to tap into powerful AI Cloud tools.
 - [x] show requests with status
 - [x] page to show individual stt by id
 - [x] filter for requests in stt page
+
+- [x] add openai keys
+- [ ] setup frontend form
+- [ ] set server action and send form
+- [ ] create db entry
+- [ ] set queue to create tti
+- [ ] create endpoint to use openai dall-e
+- [ ] save image to s3 and db
+- [ ] create route to visualize image when ready
