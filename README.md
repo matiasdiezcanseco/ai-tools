@@ -26,7 +26,7 @@ An interface to tap into powerful AI Cloud tools.
 - [x] filter for requests in stt page
 
 - [x] add openai keys
-- [ ] setup frontend form
+- [x] setup frontend form
 - [ ] set server action and send form
 - [ ] create db entry
 - [ ] set queue to create tti

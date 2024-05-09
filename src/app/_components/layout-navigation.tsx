@@ -2,7 +2,6 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Badge } from "~/components/ui/badge";
 
 export const LayoutNavigation = () => {
   const path = usePathname();
@@ -23,10 +22,9 @@ export const LayoutNavigation = () => {
       <Link href="/stt" className={generateClassName("/stt")}>
         Speach to Text
       </Link>
-      <div className="flex cursor-not-allowed gap-2 text-muted">
+      <Link href="/tti" className={generateClassName("/tti")}>
         Text to Image
-        <Badge>Soon</Badge>
-      </div>
+      </Link>
     </>
   );
 };
