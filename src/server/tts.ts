@@ -52,7 +52,7 @@ export const updateTtsStatusById = async ({
   url,
 }: {
   id: number;
-  status: string;
+  status: "finished" | "failed" | "pending";
   url?: string;
 }) => {
   const result = await db

@@ -46,7 +46,7 @@ export const updateSttStatusById = async ({
   text,
 }: {
   id: number;
-  status: string;
+  status: "finished" | "failed" | "pending";
   text?: string;
 }) => {
   const result = await db
