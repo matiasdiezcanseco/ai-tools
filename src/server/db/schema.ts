@@ -48,6 +48,18 @@ export const sttTable = createTable("stt", {
   userId: varchar("user_id", { length: 128 }).notNull(),
 });
 
+export const ttiTable = createTable("tti", {
+  id: serial("id").primaryKey(),
+  text: varchar("text", { length: 500 }).notNull(),
+  status: varchar("status", { length: 50 }).notNull(),
+  imageUrl: varchar("image_url", { length: 500 }),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt"),
+  userId: varchar("user_id", { length: 128 }).notNull(),
+});
+
 export const selectTtsSchema = createSelectSchema(ttsTable);
 export type SelectTts = InferSelectModel<typeof ttsTable>;
 // SelectTts.status only has 3 possible values: "pending", "failed", "finished"
@@ -56,3 +68,6 @@ export type SelectTts = InferSelectModel<typeof ttsTable>;
 
 export const selectSttSchema = createSelectSchema(sttTable);
 export type SelectStt = InferSelectModel<typeof sttTable>;
+
+export const selectTtiSchema = createSelectSchema(ttiTable);
+export type SelectTti = InferSelectModel<typeof ttiTable>;

@@ -15,6 +15,7 @@ import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { type z } from "zod";
 import { ttiFormSchema } from "~/lib/schemas";
+import { createTtiAction } from "~/server/actions/tti";
 
 export default function TtiForm() {
   const form = useForm<z.infer<typeof ttiFormSchema>>({
@@ -30,14 +31,14 @@ export default function TtiForm() {
         <Spinner className="size-4" />
         Creating image...
       </div>,
-      { duration: 100000, id: "ttsRequest" },
+      { duration: 100000, id: "ttiRequest" },
     );
     try {
-      // await createTtsAction(values);
-      toast.dismiss("ttsRequest");
+      await createTtiAction(values);
+      toast.dismiss("ttiRequest");
       toast("Request submitted", { duration: 3000 });
     } catch (e: unknown) {
-      toast.dismiss("ttsRequest");
+      toast.dismiss("ttiRequest");
       if (e instanceof Error) {
         toast(e.message, { duration: 3000 });
         return;

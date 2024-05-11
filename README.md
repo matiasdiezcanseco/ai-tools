@@ -27,9 +27,9 @@ An interface to tap into powerful AI Cloud tools.
 
 - [x] add openai keys
 - [x] setup frontend form
-- [ ] set server action and send form
-- [ ] create db entry
-- [ ] set queue to create tti
+- [x] set server action and send form
+- [x] create db entry
+- [x] set queue to create tti
 - [ ] create endpoint to use openai dall-e
 - [ ] save image to s3 and db
 - [ ] create route to visualize image when ready
