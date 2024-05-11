@@ -12,13 +12,18 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
 export async function POST(request: Request) {
+  const body = (await request.json()) as SelectTti;
+
+  const parsedBody = selectTtiSchema.pick({ text: true, id: true }).parse(body);
+
+  const updateRequestAsFailed = async () => {
+    await updateTtiStatusById({
+      id: parsedBody.id,
+      status: "failed",
+    });
+  };
+
   try {
-    const body = (await request.json()) as SelectTti;
-
-    const parsedBody = selectTtiSchema
-      .pick({ text: true, id: true })
-      .parse(body);
-
     const openai = new OpenAI({ apiKey: env.OPEN_AI_API_KEY });
 
     const response = await openai.images.generate({
@@ -29,6 +34,7 @@ export async function POST(request: Request) {
     });
 
     if (!response.data[0]) {
+      await updateRequestAsFailed();
       throw new Error("Failed to generate image");
     }
 
@@ -41,6 +47,7 @@ export async function POST(request: Request) {
     });
 
     if (!updatedTti) {
+      await updateRequestAsFailed();
       throw new Error("Failed to update TTI status");
     }
 
