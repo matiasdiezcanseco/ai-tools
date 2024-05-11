@@ -31,5 +31,5 @@ An interface to tap into powerful AI Cloud tools.
 - [x] create db entry
 - [x] set queue to create tti
 - [x] create endpoint to use openai dall-e
-- [ ] save image to s3 and db
-- [ ] create route to visualize image when ready
+- [ ] save image to s3
+- [x] create route to visualize image when ready
