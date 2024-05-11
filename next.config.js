@@ -9,6 +9,9 @@ const config = {
   experimental: {
     serverComponentsExternalPackages: ["@aws-sdk"],
   },
+  images: {
+    domains: ["oaidalleapiprodscus.blob.core.windows.net"],
+  },
 };
 
 export default config;

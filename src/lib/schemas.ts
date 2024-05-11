@@ -8,9 +8,6 @@ export const ttsFormSchema = z.object({
   text: z.string().min(2).max(500),
 });
 
-export const signUrlSchema = z.object({
-  id: z.number(),
-  type: z.enum(["tts"]),
+export const ttiFormSchema = z.object({
+  text: z.string().min(10).max(500),
 });
-
-export type SignUrl = z.infer<typeof signUrlSchema>;

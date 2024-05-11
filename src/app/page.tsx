@@ -54,7 +54,7 @@ export default function HomePage() {
       title: "TTI",
       description: "Convert text to image",
       href: "/tti",
-      enabled: false,
+      enabled: true,
     },
   ];
 
